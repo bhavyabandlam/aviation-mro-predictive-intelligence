@@ -1,0 +1,65 @@
+# Aviation MRO Predictive Intelligence - pinned dependencies
+# Justification: every package is required; see docs/DEPENDENCIES.md for the rationale.
+# Generated: 2026-11-11. Python 3.13.2. B1 revision: 2026-11-18 (added statsmodels, joblib, pyyaml).
+# Dev-only block (pytest, ruff, mypy, type stubs) is at the end and not needed at runtime.
+
+# --- Core data manipulation ---
+# pandas: vectorised DataFrame operations, time-series, groupby. Required; stdlib csv is too slow/fragile.
+pandas==3.0.6
+# numpy: array computing. pandas/scipy/sklearn depend on it.
+numpy==2.5.3
+# pyarrow: Parquet read/write for the persistence layer.
+pyarrow==26.0.1
+
+# --- Statistics ---
+# scipy: distributions, statistical tests (KS, Levene, Shapiro), confidence intervals.
+scipy==1.18.1
+# statsmodels: augmented Dickey-Fuller stationarity test (used in EDA). Required; no stdlib equivalent.
+statsmodels==0.14.4
+
+# --- Machine learning ---
+# scikit-learn: models, metrics, train/test split, preprocessing. Baseline ML; xgboost deferred.
+scikit-learn==1.9.1
+# joblib: serialisation of model artifacts (.pkl) for baseline + anomaly models. sklearn depends on it.
+joblib==1.4.2
+
+# --- Configuration ---
+# pyyaml: loads config/{data_sources,model_config,business_rules}.yaml (Section 9). Required.
+pyyaml==6.0.3
+
+# --- Visualisation ---
+# matplotlib: baseline plotting for EDA reports.
+matplotlib==3.11.2
+# seaborn, plotly: deferred - not needed for initial EDA.
+
+# --- Dashboard ---
+# streamlit: dashboard presentation layer (required by SRS).
+streamlit==1.67.0
+
+# --- Explainability ---
+# shap: TreeSHAP explanations for the RUL GradientBoosting model (Section 9.6).
+# shap==0.54.1 ships a cp312-abi3 wheel (Python 3.13 compatible); pulls slicer.
+shap==0.54.1
+
+# --- Validation / quality ---
+# pandera: deferred - pydantic + manual checks used initially.
+
+# --- Development / tooling (not required at runtime) ---
+# pytest: test runner.
+pytest==9.2.0
+# pytest-cov: deferred until tests exist to report on.
+# ruff: fast linter.
+ruff==0.17.4
+# mypy: static type checker (configured-scope: `mypy src`).
+mypy==2.4.1
+# Type stubs (development / type-checking only): py.typed-compatible stubs so
+# `mypy src` is meaningful. Not required at runtime.
+pandas-stubs
+scipy-stubs
+types-PyYAML
+
+# --- Experiments ---
+# mlflow: deferred - overkill for this project.
+
+# --- Notebooks ---
+# jupyterlab: deferred - VS Code notebooks used for exploration.

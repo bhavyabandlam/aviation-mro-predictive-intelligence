@@ -1,0 +1,52 @@
+# Model configuration (SRS v1.1 §5.4, FR-06, FR-07).
+# Values mirror the actual defaults in the code.
+
+random_seed: 42
+
+rul:
+  algorithm: gradientboosting
+  rul_cap: 125
+  features:
+    window_sizes: [3, 5]
+    include_op_settings: true
+    include_cycle_norm: false
+  split:
+    method: engine
+    random_seed: 42
+  preprocessing:
+    imputer: median
+    scaler: standard
+    fit_on: train
+  candidate_models:
+    - Dummy
+    - Linear
+    - Ridge
+    - RandomForest
+    - GradientBoosting
+  selection_metric: val_rmse
+  evaluation_metrics: [mae, rmse, r2]
+  artifact: models/baseline_rul_model_v2.pkl
+  model_card: reports/model_card_baseline_v2.json
+
+anomaly:
+  algorithm: isolation_forest
+  n_estimators: 200
+  max_samples: auto
+  contamination: 0.01
+  random_state: 42
+  features: rolling_plus_residual
+  threshold_method: train_score_percentile
+  artifact: models/anomaly_model.pkl
+  model_card: reports/anomaly_model_card.json
+
+forecasting:
+  seasonal_candidate_periods: [52, 13]
+  metrics: [mae, rmse, wape]
+  uncertainty: empirical_interval
+
+explainability:
+  library: shap
+  explainer: tree_explainer
+  background_size: 100
+  model_output: raw
+  local_engines: 12

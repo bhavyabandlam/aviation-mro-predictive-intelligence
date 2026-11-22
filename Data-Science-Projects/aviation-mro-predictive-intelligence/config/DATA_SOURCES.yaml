@@ -1,0 +1,77 @@
+# Data source register (SRS v1.1 §5.3, FR-01).
+# Machine-readable companion to docs/DATA_SOURCES.md.
+# status: active | deferred | optional | not_loaded
+
+sources:
+  DS-01:
+    title: NASA C-MAPSS FD001 Turbofan Degradation (simulated)
+    publisher: NASA Prognostics Center of Excellence
+    type: simulated_benchmark
+    status: active
+    local_path: data/raw/fd001
+    files:
+      - train_FD001.txt
+      - test_FD001.txt
+      - RUL_FD001.txt
+    format: whitespace_delimited_text
+    used_by: [eda, rul, anomaly]
+    notes: Simulated run-to-failure benchmark; not real fleet records.
+
+  DS-02:
+    title: NASA N-CMAPSS (Commercial Modular Aero-Propulsion System Simulation)
+    publisher: NASA PCoE
+    type: simulated_benchmark
+    status: deferred
+    local_path: null
+    used_by: []
+    notes: Deferred until DS-01 ingestion and quality gates pass (SRS §5.3).
+
+  DS-03:
+    title: BTS Airline On-Time Performance
+    publisher: US Bureau of Transportation Statistics
+    type: public_operational
+    status: not_loaded
+    local_path: null
+    used_by: []
+    notes: >
+      Optional separate operational-performance analysis. Must NOT be joined to
+      NASA engine IDs or used to infer engine causation (SRS §5.3, DS-04/DS-05).
+
+  DS-04:
+    title: OurAirports reference data
+    publisher: OurAirports
+    type: public_reference
+    status: optional
+    local_path: null
+    used_by: []
+    notes: Public-domain airport reference; only if airport-level analysis is built.
+
+  DS-05:
+    title: Synthetic MRO weekly demand
+    publisher: internal (generated)
+    type: synthetic
+    status: active
+    local_path: data/processed/maintenance_demand.parquet
+    generator: aviation_mro.analytics.forecasting.data_prep
+    random_seed: 42
+    used_by: [forecasting, inventory, financial]
+
+  DS-06:
+    title: Synthetic inventory part master
+    publisher: internal (generated)
+    type: synthetic
+    status: active
+    local_path: data/processed/inventory_data.parquet
+    generator: aviation_mro.analytics.inventory.data_prep
+    random_seed: 42
+    used_by: [inventory, financial]
+
+  DS-07:
+    title: Synthetic financial cost parameters
+    publisher: internal (generated)
+    type: synthetic
+    status: active
+    local_path: data/processed
+    generator: aviation_mro.analytics.financial.data_prep
+    random_seed: 42
+    used_by: [financial]

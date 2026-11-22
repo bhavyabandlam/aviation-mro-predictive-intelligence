@@ -1,0 +1,27 @@
+# Business rules (SRS v1.1 §5.5, §11, FR-09, FR-10).
+# Centralised formulas/assumptions so business logic is not scattered as literals.
+
+inventory:
+  default_service_level: 0.95
+  weeks_per_year: 52
+  safety_stock_method: normal_constant_lt
+  slow_moving_threshold_weeks: 52   # no demand in trailing 52 weeks => slow-moving
+
+financial:
+  holding_cost_rate: 0.20           # fraction of unit cost per year
+  order_cost: 75.0                  # fixed cost per purchase order
+  stockout_cost_multiplier: 10.0    # stockout cost = multiplier * unit cost
+  weeks_per_year: 52
+  fleet_mix:
+    NARROW_BODY: 0.60
+    WIDE_BODY: 0.25
+    REGIONAL: 0.15
+  predictive_maintenance:
+    downtime_reduction: 0.20
+    implementation_cost: 500000.0
+    annual_operating_cost: 100000.0
+
+roi:
+  # SRS FR-10: ROI(%) = ((Estimated Benefit - Investment Cost) / Investment Cost) * 100
+  benefit: predictive_cost_avoidance
+  investment_cost: 500000.0

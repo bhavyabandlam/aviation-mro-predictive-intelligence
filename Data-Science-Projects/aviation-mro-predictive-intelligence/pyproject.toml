@@ -1,0 +1,74 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aviation-mro"
+version = "0.1.0"
+description = "Aviation MRO Predictive Intelligence Platform"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "pandas==3.0.6",
+    "numpy==2.5.3",
+    "pyarrow==26.0.1",
+    "scipy==1.18.1",
+    "scikit-learn==1.9.1",
+    "joblib==1.4.2",
+    "statsmodels==0.14.4",
+    "pyyaml==6.0.3",
+    "matplotlib==3.11.2",
+    "streamlit==1.67.0",
+    "pytest==9.2.0",
+    "ruff==0.17.4",
+    "shap==0.54.1",
+]
+
+[project.optional-dependencies]
+# Type stubs and static-analysis support (mirrors the dev block in requirements.txt).
+dev = ["pandas-stubs", "scipy-stubs", "types-PyYAML"]
+xgboost = ["xgboost==3.0.2"]
+mlflow = ["mlflow==2.19.0"]
+jupyter = ["jupyterlab==4.3.5"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["aviation_mro*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+lint.select = ["E", "F", "I", "UP", "B", "C4", "SIM", "T20"]
+lint.ignore = ["S101", "S311"]
+format.quote-style = "double"
+# Scratch/experimental investigation scripts and exploration notebooks are not
+# shipped or tested; they are excluded from lint/format gating (see
+# docs/DEVELOPER_HANDOFF.md workflow: "Notebooks are for exploration").
+extend-exclude = ["scratch", "notebooks", "scripts"]
+
+[tool.mypy]
+python_version = "3.13"
+warn_return_any = true
+warn_unused_ignores = true
+disallow_untyped_defs = true
+explicit_package_bases = true
+mypy_path = "src"
+namespace_packages = true
+
+# Narrowly scoped: third-party libraries without py.typed/stubs. These are the
+# ONLY modules for which missing imports are ignored; genuine type errors are
+# never suppressed globally.
+[[tool.mypy.overrides]]
+module = [
+    "xgboost.*",
+    "streamlit.*",
+    "matplotlib.*",
+    "joblib.*",
+    "shap.*",
+    "statsmodels.*",
+    "seaborn.*",
+    "plotly.*",
+    "sklearn.*",
+    "scipy.*",
+]
+ignore_missing_imports = true
